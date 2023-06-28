@@ -68,4 +68,4 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           access-token: ${{ secrets.DOCKER_PASSWORD }}
           force: true
-          chart-folder: chart
+          chart-folder: ./chart
