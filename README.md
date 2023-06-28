@@ -1,6 +1,6 @@
 # RKE2 OIDC Discovery Tool
 
-I put this together to provide a "proxy" to the 2 necessary endpoints for OIDC configuration with Rancher's RKE2 (although it should work with most K8s distros). This tool:
+I put this together to provide a "proxy" to the two necessary endpoints for OIDC configuration with Rancher's RKE2 (although it should work with most K8s distros). This tool:
 
 * Enables you to expose OIDC endpoints (`/.well-known/openid-configuration` and `/openid/v1/jwks`) without having to enable anonymous authentication nor expose your Kubernetes API directly to the outside world.
 * Securely calls the Kubernetes API service with certificate validation and serviceAccount authentication within Kubernetes.
