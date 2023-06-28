@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oidc-discovery.fullname" . }}
+  labels:
+    {{- include "oidc-discovery.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "oidc-discovery.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "oidc-discovery.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: oidc-discovery
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: API_SERVICE
+            value: {{ .Values.config.apiServiceHost | quote }}
+          - name: API_PORT
+            value: {{ .Values.config.apiServicePort | quote }}
+          - name: API_CA_CERT
+            value: {{ .Values.config.apiCaCert | quote }}      
+          - name: TOKEN_FILE
+            value: {{ .Values.config.tokenFile | quote }}
+          {{- if .Values.config.tls.enabled }}
+          - name: TLS_ENABLED
+            value: "true"
+          {{- end }}
+          {{- if .Values.config.tls.enabled }}
+          ports:
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: https
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: https
+              scheme: HTTPS
+          {{- else }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          {{- end }}
+          {{- if .Values.config.tls.enabled }}
+          volumeMounts:
+          - name: certs
+            mountPath: "/certs"
+            readOnly: true
+          {{- end }}
+          # command:
+          #   - /bin/bash
+          #   -  -c
+          #   - |
+          #     #!/bin/bash
+          #     tail -f /dev/null
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.config.tls.enabled }}
+      volumes:
+      - name: certs
+        secret:
+          secretName: {{ .Release.Name }}-certs
+      {{- end }}

@@ -1,0 +1,72 @@
+# Default values for oidc-discovery.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+config:
+  apiServiceHost: kubernetes.default.svc.cluster.local
+  apiServicePort: 443
+  apiCaCert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+  tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+  
+  tls:
+    enabled: false
+    host: oidc.example.com
+    expirationDays:
+      ca: 1095 # default 3 years
+      cert: 365 # default 1 year
+
+image:
+  repository: harbor.atoy.dev/public/oidc-discovery
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  annotations: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: 
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  host: oidc.rancher.mexample
+
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
