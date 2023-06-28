@@ -61,14 +61,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Chart | Push
-      uses: appany/helm-oci-chart-releaser@v0.3.0
+    - name: Push Helm chart to OCI compatible registry
+      uses: bsord/helm-push@v4.1.0
       with:
-        name: rke2-oidc-discovery
-        repository: atoy3731
-        tag: 0.1.0
-        path: "./chart/"
-        registry: registry-1.docker.io/atoy3731
-        registry_username: ${{ secrets.DOCKER_USER }}
-        registry_password: ${{ secrets.DOCKER_PASSWORD }}
-        update_dependencies: 'true'
+        useOCIRegistry: true
+        registry-url:  oci://registry-1.docker.io/${{ secrets.DOCKER_USER }}
+        username: ${{ secrets.DOCKER_USER }}
+        access-token: ${{ secrets.DOCKER_PASSWORD }}
+        force: true
+        chart-folder: chart
