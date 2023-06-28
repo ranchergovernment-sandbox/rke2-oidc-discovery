@@ -59,6 +59,7 @@ jobs:
 
   helm-publish:
     runs-on: ubuntu-latest
+    needs: docker-push
     steps:
     - uses: actions/checkout@v2
     - name: Push Helm chart to OCI compatible registry
