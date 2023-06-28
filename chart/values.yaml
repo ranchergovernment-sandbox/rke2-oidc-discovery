@@ -34,13 +34,14 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
+# This securityContext is configured to run effectively with `restricted` PSA mode enabled.
 securityContext: 
   capabilities:
     drop:
     - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 1000
+  runAsUser: 65532
   allowPrivilegeEscalation: false
   seccompProfile:
     type: RuntimeDefault
@@ -52,7 +53,7 @@ ingress:
   enabled: false
   className: ""
   annotations: {}
-  host: oidc.rancher.mexample
+  host: oidc.example.com
 
   tls: []
 
