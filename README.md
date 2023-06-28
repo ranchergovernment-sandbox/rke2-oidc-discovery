@@ -12,9 +12,6 @@ You can install this tool using [Helm](https://helm.sh/docs/intro/install/). Che
 
 An example installation would be:
 ```bash
-# Clone repo
-git clone https://github.com/atoy3731/rke2-oidc-discovery.git
-
 # Override default values
 cat <<EOT > /tmp/values.yaml
 ingress:
@@ -32,7 +29,7 @@ config:
 EOT
 
 # Now install
-helm install -n oidc-discovery --create-namespace -f /tmp/values.yaml oidc-discovery rke2-oidc-discovery/chart/
+helm install -n oidc-discovery --create-namespace -f /tmp/values.yaml oidc-discovery oci://registry-1.docker.io/atoy3731/rke2-oidc-discovery
 ```
 
 ## TLS Options
