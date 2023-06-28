@@ -1,5 +1,5 @@
 apiVersion: v2
-name: oidc-discovery
+name: rke2-oidc-discovery
 description: RKE2 OIDC Discovery Tool
 
 type: application
