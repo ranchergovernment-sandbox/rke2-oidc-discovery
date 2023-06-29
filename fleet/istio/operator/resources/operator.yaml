@@ -12,8 +12,8 @@ spec:
     - enabled: true
       k8s:
         hpaSpec:
-          maxReplicas: 3
-          minReplicas: 3
+          maxReplicas: 1
+          minReplicas: 1
         service:
           ports:
           - name: https
@@ -27,8 +27,8 @@ spec:
       enabled: true
       k8s:
         hpaSpec:
-          maxReplicas: 3
-          minReplicas: 3
+          maxReplicas: 1
+          minReplicas: 1
   meshConfig:
     outboundTrafficPolicy:
       mode: ALLOW_ANY
