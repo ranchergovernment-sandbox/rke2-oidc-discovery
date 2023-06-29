@@ -1,0 +1,14 @@
+kind: GitRepo
+apiVersion: fleet.cattle.io/v1alpha1
+metadata:
+  name: rke2-oidc-discovery
+  namespace: fleet-default
+spec:
+  repo: https://github.com/atoy3731/rke2-oidc-discovery.git
+  targets:
+  - name: oidc
+    clusterSelector:
+      matchLabels:
+        oidc: enabled
+  paths:
+  - "./fleet"
