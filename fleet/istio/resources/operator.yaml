@@ -1,0 +1,40 @@
+# Source: templates/operator.yaml
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: controlplane
+  namespace: istio-system
+spec:
+  components:
+    ingressGateways:
+    - enabled: true
+      k8s:
+        hpaSpec:
+          maxReplicas: 3
+          minReplicas: 3
+        service:
+          ports:
+          - name: https
+            port: 443
+            protocol: TCP
+            targetPort: 8443
+      name: oidc-ingressgateway
+    pilot:
+      enabled: true
+      k8s:
+        hpaSpec:
+          maxReplicas: 3
+          minReplicas: 3
+  meshConfig:
+    outboundTrafficPolicy:
+      mode: ALLOW_ANY
+  values:
+    global:
+      proxy:
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi

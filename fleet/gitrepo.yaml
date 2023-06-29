@@ -12,4 +12,7 @@ spec:
       matchLabels:
         oidc: enabled
   paths:
-  - "./fleet"
+  - "./fleet/cert-manager/cert-manager"
+  - "./fleet/cert-manager/cert-resources"
+  - "./fleet/istio"
+  - "./fleet/rke2-oidc-discovery"

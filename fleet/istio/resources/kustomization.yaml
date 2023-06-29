@@ -1,0 +1,4 @@
+resources:
+- gateway.yaml
+- operator.yaml
+- virtualservice.yaml

@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: oic-vs
+  namespace: istio-system
+spec:
+  gateways:
+  - istio-system/oidc
+  hosts:
+  - oidc.kube.lol
+  http:
+  - route:
+    - destination:
+        host: rke2-oidc-discovery.rke2-oidc-discovery.svc.cluster.local
+        port:
+          number: 8080

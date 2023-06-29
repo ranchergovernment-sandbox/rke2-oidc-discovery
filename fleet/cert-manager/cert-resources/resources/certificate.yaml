@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: oidc-selfsigned-cert
+  namespace: istio-system
+spec:
+  isCA: false
+  commonName: oidc.kube.lol
+  secretName: oidc-selfsigned-cert
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: oidc-issuer
+    kind: Issuer
+    group: cert-manager.io

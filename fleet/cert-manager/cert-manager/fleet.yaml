@@ -1,0 +1,12 @@
+defaultNamespace: cert-manager
+
+labels:
+  app: oidc-cert-manager
+
+helm:
+  repository: https://charts.jetstack.io
+  chart: cert-manager
+  version: 1.12.0
+  releaseName: cert-manager
+  values:
+    installCRDs: true

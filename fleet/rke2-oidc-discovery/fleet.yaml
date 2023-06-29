@@ -17,3 +17,8 @@ helm:
       tls:
         enabled: true
         host: oidc.kube.lol
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: oidc-istio
