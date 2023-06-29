@@ -4,9 +4,7 @@ labels:
   app: oidc-cert-manager
 
 helm:
-  repo: https://charts.jetstack.io
-  chart: cert-manager
-  version: v1.12.0
+  chart: ./chart
   releaseName: cert-manager
   values:
     installCRDs: true
