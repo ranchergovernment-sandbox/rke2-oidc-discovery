@@ -7,6 +7,8 @@ metadata:
 spec:
   components:
     ingressGateways:
+    - enabled: false
+      name: istio-ingressgateway
     - enabled: true
       k8s:
         hpaSpec:
@@ -18,6 +20,8 @@ spec:
             port: 443
             protocol: TCP
             targetPort: 8443
+      label:
+        app: oidc-ingressgateway
       name: oidc-ingressgateway
     pilot:
       enabled: true
