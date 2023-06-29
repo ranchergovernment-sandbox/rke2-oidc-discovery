@@ -5,7 +5,7 @@ metadata:
   namespace: fleet-default
 spec:
   repo: https://github.com/atoy3731/rke2-oidc-discovery.git
-  branch: main
+  branch: kube-lol
   targets:
   - name: oidc
     clusterSelector:

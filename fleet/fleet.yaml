@@ -4,5 +4,16 @@ helm:
   chart: "oci://ghcr.io/atoy3731/rke2-oidc-discovery"
   version: 0.1.0
   releaseName: rke2-oidc-discovery
-  valueFiles:
-  - values.yaml
+  values:
+    ingress:
+      enabled: true
+      host: oidc.kube.lol
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+    config:
+      tls:
+        enabled: true
+        host: oidc.kube.lol
