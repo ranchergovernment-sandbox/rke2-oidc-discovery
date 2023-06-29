@@ -6,6 +6,7 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
-ssl:
-  enabled: true
-  host: oidc.kube.lol
+config:
+  tls:
+    enabled: true
+    host: oidc.kube.lol
