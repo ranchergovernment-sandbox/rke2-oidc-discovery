@@ -1,7 +1,7 @@
 defaultNamespace: istio-system
 
 labels:
-  app: oidc-istio
+  app: oidc-istio-operator
 
 kustomize:
   dir: ./resources/

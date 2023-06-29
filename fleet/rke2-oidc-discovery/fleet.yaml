@@ -21,4 +21,4 @@ helm:
 dependsOn:
   - selector:
       matchLabels:
-        app: oidc-istio
+        app: oidc-istio-resources

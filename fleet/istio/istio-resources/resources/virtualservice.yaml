@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: oic-vs
+  name: oidc-vs
   namespace: istio-system
 spec:
   gateways:
