@@ -1,3 +1,4 @@
 resources:
 - certificate.yaml
 - issuer.yaml
+- istio-namespace.yaml
