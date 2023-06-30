@@ -43,3 +43,17 @@ When serving up an OIDC endpoint, it is a requirement that it is served via HTTP
 ## Use Cases
 
 This is incredible useful if you want to do things like [AWS Pod-Level IAM for Service Accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html), but has other use-cases as well.
+
+## Fleet Example
+
+If you're leveraging Rancher & Fleet, check out the [Fleet directory](./fleet) to an example, fully-fleet-ified rollout of this application against AWS OIDC for pod-level IAM roles.
+
+**NOTE**: You need to have the istio-operator preinstalled. Download `istioctl` and run `istioctl operator init`.
+
+Components:
+
+* Cert Manager: Creates self-signed certificate for OIDC endpoints.
+* Istio: Provides secure ingress point for OIDC endpoints exposed by this service.
+* EKS IAM Webhook: Operator for managing STS assumed roles at the pod level
+* RKE2 OIDC Discovery: This tool itself
+* Demo-App: Demo app to showcase what is going on. **NOTE**: Check out the [terraform](./fleet/demo-app/terraform) directory for an example on how to get our OIDC provider and roles configured.
