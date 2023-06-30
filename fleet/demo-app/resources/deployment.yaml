@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      serviceAccountName: demo-sa
+      containers:
+      - name: demo-app
+        image: "ubuntu"
+        imagePullPolicy: Always
+        command:
+        - /bin/bash
+        - -c
+        - |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install -y python3 python3-pip
+          pip3 install awscli
+
+          tail -f /dev/null
+

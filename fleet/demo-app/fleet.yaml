@@ -1,0 +1,12 @@
+defaultNamespace: demo
+
+labels:
+  app: demo-app
+
+kustomize:
+  dir: ./resources/
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: eks-iam-webhook
