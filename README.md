@@ -60,8 +60,8 @@ If you're leveraging Rancher & Fleet, check out the [Fleet directory](./fleet) t
 
 Components:
 
-* Cert Manager: Creates self-signed certificate for OIDC endpoints.
-* Istio: Provides secure ingress point for OIDC endpoints exposed by this service.
-* EKS IAM Webhook: Operator for managing STS assumed roles at the pod level
-* RKE2 OIDC Discovery: This tool itself
-* Demo-App: Demo app to showcase what is going on. **NOTE**: Check out the [terraform](./fleet/demo-app/terraform) directory for an example on how to get our OIDC provider and roles configured.
+* **Cert Manager**: Creates self-signed certificate for OIDC endpoints.
+* **Istio**: Provides secure ingress point for OIDC endpoints exposed by this service.
+* **EKS IAM Webhook**: Operator for managing STS assumed roles at the pod level
+* **RKE2 OIDC Discovery**: This tool itself
+* **Demo-App**: Demo app to showcase what is going on. **NOTE**: Check out the [terraform](./fleet/demo-app/terraform) directory for an example on how to get our OIDC provider and roles configured.
