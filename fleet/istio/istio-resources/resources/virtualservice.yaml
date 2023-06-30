@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: oidc-vs
+  namespace: istio-system
+spec:
+  gateways:
+  - istio-system/oidc
+  hosts:
+  - oidc.kube.lol
+  http:
+  - match:
+    - uri:
+        prefix: /.well-known/openid-configuration
+    - uri:
+        prefix: /openid/v1/jwks
+    route:
+    - destination:
+        host: rke2-oidc-discovery.rke2-oidc-discovery.svc.cluster.local
+        port:
+          number: 8080
+  - route:
+    - destination:
+        host: blackhole
+        port:
+          number: 80

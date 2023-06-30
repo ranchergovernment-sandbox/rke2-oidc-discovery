@@ -1,6 +1,0 @@
-defaultNamespace: rke2-oidc-discovery
-
-helm:
-  chart: "oci://ghcr.io/atoy3731/rke2-oidc-discovery"
-  version: 0.1.0
-  releaseName: rke2-oidc-discovery

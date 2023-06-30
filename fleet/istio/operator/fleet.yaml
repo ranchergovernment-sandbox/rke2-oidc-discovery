@@ -1,0 +1,12 @@
+defaultNamespace: istio-system
+
+labels:
+  app: oidc-istio-operator
+
+kustomize:
+  dir: ./resources/
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: oidc-cert-resources

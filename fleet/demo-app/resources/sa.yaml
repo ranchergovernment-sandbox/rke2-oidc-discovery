@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: demo-sa
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::539300447621:role/oidc_s3_role"
+    eks.amazonaws.com/audience: "rke2"
