@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app-default
+  name: demo-app-iam
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo-app-default
+      app: demo-app-iam
   template:
     metadata:
       labels:
-        app: demo-app-default
+        app: demo-app-iam
     spec:
-      serviceAccountName: default
+      serviceAccountName: demo-sa
       containers:
-      - name: demo-app-default
+      - name: demo-app-iam
         image: "ubuntu"
         imagePullPolicy: Always
         command:
