@@ -10,3 +10,13 @@ kustomize:
 #   - selector:
 #       matchLabels:
 #         app: rke2-oidc-discovery
+
+diff:
+  comparePatches:
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    name: pod-identity-webhook
+    namespace: eks-iam-webhook
+    operations:
+    - {"op": "remove", "path": "/spec/duration"}
+    - {"op": "remove", "path": "/spec/renewBefore"}
