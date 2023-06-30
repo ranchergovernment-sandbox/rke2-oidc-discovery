@@ -10,7 +10,15 @@ I put this together to provide a "proxy" to the two necessary endpoints for OIDC
 
 You can install this tool using [Helm](https://helm.sh/docs/intro/install/). Check out the [chart README](./chart/README.md) and [values.yaml](./chart/values.yaml) for further details.
 
-An example installation would be:
+### Ingress/Cert-Manager TLS Example (No Pod-Level TLS)
+
+```bash
+# No custom values necessary. Install
+helm install -n oidc-discovery --create-namespace oidc-discovery oci://registry-1.docker.io/atoy3731/rke2-oidc-discovery
+```
+
+### Pod-Level TLS Enabled Example 
+
 ```bash
 # Override default values
 cat <<EOT > /tmp/values.yaml
@@ -27,9 +35,6 @@ config:
     enabled: true
     host: oidc.example.com
 EOT
-
-# Now install
-helm install -n oidc-discovery --create-namespace -f /tmp/values.yaml oidc-discovery oci://registry-1.docker.io/atoy3731/rke2-oidc-discovery
 ```
 
 ## TLS Options
