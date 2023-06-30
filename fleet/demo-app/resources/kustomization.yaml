@@ -1,3 +1,4 @@
 resources:
-- deployment.yaml
+- deployment-default.yaml
+- deployment-iam.yaml
 - sa.yaml
