@@ -17,3 +17,4 @@ spec:
   - "./fleet/istio/operator"
   - "./fleet/istio/istio-resources"
   - "./fleet/rke2-oidc-discovery"
+  - "./fleet/eks-iam-webhook"

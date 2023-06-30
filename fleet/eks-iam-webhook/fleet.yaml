@@ -1,0 +1,12 @@
+defaultNamespace: eks-iam-webhook
+
+labels:
+  app: eks-iam-webhook
+
+kustomize:
+  dir: ./resources/
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: rke2-oidc-discovery
