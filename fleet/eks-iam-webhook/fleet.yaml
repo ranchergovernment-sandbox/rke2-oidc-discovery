@@ -6,7 +6,7 @@ labels:
 kustomize:
   dir: ./resources/
 
-dependsOn:
-  - selector:
-      matchLabels:
-        app: rke2-oidc-discovery
+# dependsOn:
+#   - selector:
+#       matchLabels:
+#         app: rke2-oidc-discovery
