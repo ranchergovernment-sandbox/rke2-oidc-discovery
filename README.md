@@ -35,6 +35,9 @@ config:
     enabled: true
     host: oidc.example.com
 EOT
+
+# Install with values
+helm install -n oidc-discovery -f /tmp/values.yaml --create-namespace oidc-discovery oci://registry-1.docker.io/atoy3731/rke2-oidc-discovery
 ```
 
 ## TLS Options
