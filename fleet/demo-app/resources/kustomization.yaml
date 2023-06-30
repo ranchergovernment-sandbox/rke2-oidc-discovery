@@ -2,3 +2,4 @@ resources:
 - deployment-default.yaml
 - deployment-iam.yaml
 - sa.yaml
+- networkpolicy.yaml
