@@ -12,7 +12,6 @@ spec:
       matchLabels:
         oidc: enabled
   paths:
-  - "./fleet/cert-manager/cert-manager"
   - "./fleet/cert-manager/cert-resources"
   - "./fleet/istio/operator"
   - "./fleet/istio/istio-resources"
