@@ -1,7 +1,7 @@
 defaultNamespace: cert-manager
 
 labels:
-  app: oidc-cert-resources
+  app: cert-manager
 
 kustomize:
   dir: ./resources/
