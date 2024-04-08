@@ -10,11 +10,18 @@ I put this together to provide a "proxy" to the two necessary endpoints for OIDC
 
 You can install this tool using [Helm](https://helm.sh/docs/intro/install/). Check out the [chart README](./chart/README.md) and [values.yaml](./chart/values.yaml) for further details.
 
+### Add the Helm repo
+
+```bash
+helm repo add oidc-discovery https://ranchergovernment-sandbox.github.io/rke2-oidc-discovery/
+helm repo update
+```
+
 ### Ingress/Cert-Manager TLS Example (No Pod-Level TLS)
 
 ```bash
 # No custom values necessary. Install
-helm install -n oidc-discovery --create-namespace oidc-discovery oci://registry-1.docker.io/atoy3731/rke2-oidc-discovery
+helm install -n oidc-discovery --create-namespace oidc-discovery oidc-discovery/rke2-oidc-discovery
 ```
 
 ### Pod-Level TLS Enabled Example 
@@ -37,7 +44,7 @@ config:
 EOT
 
 # Install with values
-helm install -n oidc-discovery -f /tmp/values.yaml --create-namespace oidc-discovery oci://registry-1.docker.io/atoy3731/rke2-oidc-discovery
+helm install -n oidc-discovery -f /tmp/values.yaml --create-namespace oidc-discovery oidc-discovery/rke2-oidc-discovery
 ```
 
 ## TLS Options
