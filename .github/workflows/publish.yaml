@@ -29,8 +29,8 @@ jobs:
 
     - name: 'Build Inventory Image'
       run: |
-        docker build . --tag $IMAGE_NAME:0.1.0
-        docker push $IMAGE_NAME:0.1.0
+        docker build . --tag $IMAGE_NAME:0.2.0
+        docker push $IMAGE_NAME:0.2.0
 
   helm-publish:
     runs-on: ubuntu-latest

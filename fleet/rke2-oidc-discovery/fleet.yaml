@@ -4,8 +4,9 @@ labels:
   app: rke2-oidc-discovery
 
 helm:
-  chart: "oci://ghcr.io/atoy3731/rke2-oidc-discovery"
-  version: 0.1.0
+  repo: https://ranchergovernment-sandbox.github.io/rke2-oidc-discovery/
+  chart: "rke2-oidc-discovery"
+  version: 0.2.0
   releaseName: rke2-oidc-discovery
 
 dependsOn:

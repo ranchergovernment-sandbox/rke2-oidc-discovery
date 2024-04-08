@@ -18,9 +18,9 @@ config:
       cert: 365 # default 1 year
 
 image:
-  repository: atoy3731/rke2-oidc-discovery
+  repository: ghcr.io/ranchergovernment-sandbox/rke2-oidc-discovery
   pullPolicy: Always
-  tag: "0.1.0"
+  tag: "0.2.0"
 
 imagePullSecrets: []
 nameOverride: ""
