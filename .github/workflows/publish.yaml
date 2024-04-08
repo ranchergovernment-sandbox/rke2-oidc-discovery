@@ -14,6 +14,7 @@ env:
 jobs:
   docker-push:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
     - name: 'Checkout GitHub Action'
@@ -36,7 +37,7 @@ jobs:
     needs: docker-push
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Push Helm chart to OCI compatible registry
       uses: bsord/helm-push@v4.1.0
       with:
