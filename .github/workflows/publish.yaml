@@ -42,7 +42,7 @@ jobs:
       uses: bsord/helm-push@v4.1.0
       with:
         useOCIRegistry: true
-        registry-url:  oci://ghcr.io/${{ secrets.REGISTRY_USER }}
+        registry-url:  oci://ghcr.io/${{ GITHUB_REPOSITORY_OWNER }}
         username: ${{ secrets.REGISTRY_USER }}
         access-token: ${{ secrets.REGISTRY_PASSWORD }}
         force: true
