@@ -1,7 +1,0 @@
-apiVersion: v2
-name: rke2-oidc-discovery
-description: RKE2 OIDC Discovery Tool
-
-type: application
-appVersion: "0.1.0"
-version: 0.1.0
