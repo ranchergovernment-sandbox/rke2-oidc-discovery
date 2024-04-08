@@ -1,3 +1,14 @@
 apiVersion: v1
-entries: {}
-generated: "2024-04-08T16:27:13.4275217-05:00"
+entries:
+  rke2-oidc-discovery:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2024-04-08T16:27:47.174640257Z"
+    description: RKE2 OIDC Discovery Tool
+    digest: 3afc4b83f7527ae7e8afad7f8d6ae63a7302d4c884e0c25cd4e97a4f94067b5b
+    name: rke2-oidc-discovery
+    type: application
+    urls:
+    - https://github.com/ranchergovernment-sandbox/rke2-oidc-discovery/releases/download/rke2-oidc-discovery-0.1.0/rke2-oidc-discovery-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-04-08T16:27:47.174651167Z"
