@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -32,7 +32,7 @@ func init() {
 	if apiPortEnv := os.Getenv("API_PORT"); apiPortEnv != "" {
 		i, err := strconv.Atoi(apiPortEnv)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("ERROR: Invalid 'API_PORT' variable (Value=%s)", apiPortEnv))
+			log.Fatalf("ERROR: Invalid 'API_PORT' variable (Value=%s)", apiPortEnv)
 		} else {
 			apiPort = i
 		}
@@ -60,7 +60,7 @@ func init() {
 	}
 
 	// Configure HTTP client with ca.crt
-	caCert, err := ioutil.ReadFile(apiCaCert)
+	caCert, err := os.ReadFile(apiCaCert)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,7 +86,7 @@ func init() {
 }
 
 func getAuthToken() (string, error) {
-	fileContent, err := ioutil.ReadFile(config.tokenFile)
+	fileContent, err := os.ReadFile(config.tokenFile)
 	if err != nil {
 		return "", fmt.Errorf("failed to read token file: %w", err)
 	}
@@ -119,7 +119,7 @@ func getOidcConfiguration() (string, error) {
 		return "", fmt.Errorf("unexpected status code: %d", res.StatusCode)
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
@@ -153,7 +153,7 @@ func getJwks() (string, error) {
 		return "", fmt.Errorf("unexpected status code: %d", res.StatusCode)
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
