@@ -20,7 +20,7 @@ config:
 image:
   repository: ghcr.io/ranchergovernment-sandbox/rke2-oidc-discovery
   pullPolicy: Always
-  tag: "0.2.0"
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
