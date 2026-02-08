@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -18,24 +18,21 @@ type Config struct {
 	tlsEnabled bool
 }
 
-var authToken string
 var config Config
 var client http.Client
 
 func init() {
 	// Initialization of Config
-
 	// K8s API Service
 	config.apiService = "kubernetes.default.svc.cluster.local"
 	if apiServiceEnv := os.Getenv("API_SERVICE"); apiServiceEnv != "" {
 		config.apiService = apiServiceEnv
 	}
-
 	apiPort := 443
 	if apiPortEnv := os.Getenv("API_PORT"); apiPortEnv != "" {
 		i, err := strconv.Atoi(apiPortEnv)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("ERROR: Invalid 'API_PORT' variable (Value=%s)", apiPortEnv))
+			log.Fatalf("ERROR: Invalid 'API_PORT' variable (Value=%s)", apiPortEnv)
 		} else {
 			apiPort = i
 		}
@@ -63,13 +60,12 @@ func init() {
 	}
 
 	// Configure HTTP client with ca.crt
-	caCert, err := ioutil.ReadFile(apiCaCert)
+	caCert, err := os.ReadFile(apiCaCert)
 	if err != nil {
 		log.Fatal(err)
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
-
 	client = http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
@@ -78,7 +74,7 @@ func init() {
 		},
 	}
 
-	log.Printf(fmt.Sprintf(`
+	log.Printf(`
 	----------------------------
 	OIDC Discovery Configuration
 	----------------------------
@@ -86,57 +82,104 @@ func init() {
 	apiCaCert: %s
 	tokenFile: %s
 	tlsEnabled: %t
-	`, config.apiService, apiCaCert, config.tokenFile, config.tlsEnabled))
+	`, config.apiService, apiCaCert, config.tokenFile, config.tlsEnabled)
 }
 
-func getAuthToken() {
-	fileContent, err := ioutil.ReadFile(config.tokenFile)
+func getAuthToken() (string, error) {
+	fileContent, err := os.ReadFile(config.tokenFile)
 	if err != nil {
-		log.Fatal(err)
+		return "", fmt.Errorf("failed to read token file: %w", err)
+	}
+	return strings.TrimSuffix(string(fileContent), "\n"), nil
+}
+
+func getOidcConfiguration() (string, error) {
+	// Read token fresh for this request
+	authToken, err := getAuthToken()
+	if err != nil {
+		return "", fmt.Errorf("failed to get auth token: %w", err)
 	}
 
-	authToken = strings.TrimSuffix(string(fileContent), "\n")
-}
-
-func getOidcConfiguration() string {
 	// Make request
 	url := "https://kubernetes.default.svc.cluster.local/.well-known/openid-configuration"
-	req, _ := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", authToken))
 
 	// Get result and pass result body back
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return "", fmt.Errorf("failed to execute request: %w", err)
 	}
 	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
-	return string(body)
+
+	if res.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("unexpected status code: %d", res.StatusCode)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	return string(body), nil
 }
 
-func getJwks() string {
+func getJwks() (string, error) {
+	// Read token fresh for this request
+	authToken, err := getAuthToken()
+	if err != nil {
+		return "", fmt.Errorf("failed to get auth token: %w", err)
+	}
+
 	// Make request
 	url := fmt.Sprintf("https://%s/openid/v1/jwks", config.apiService)
-	req, _ := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", authToken))
 
 	// Get result and pass result back
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return "", fmt.Errorf("failed to execute request: %w", err)
 	}
 	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
-	return string(body)
+
+	if res.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("unexpected status code: %d", res.StatusCode)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	return string(body), nil
 }
 
 func oidcConfiguration(w http.ResponseWriter, r *http.Request) {
-	body := getOidcConfiguration()
+	body, err := getOidcConfiguration()
+	if err != nil {
+		log.Printf("Error getting OIDC configuration: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, body)
 }
 
 func jwks(w http.ResponseWriter, r *http.Request) {
-	body := getJwks()
+	body, err := getJwks()
+	if err != nil {
+		log.Printf("Error getting JWKS: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, body)
 }
 
@@ -144,7 +187,7 @@ func handleRequests() {
 	http.HandleFunc("/.well-known/openid-configuration", oidcConfiguration)
 	http.HandleFunc("/openid/v1/jwks", jwks)
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte{})
+		w.Write([]byte("OK"))
 	})
 
 	log.Printf("Starting listener..")
@@ -156,6 +199,5 @@ func handleRequests() {
 }
 
 func main() {
-	getAuthToken()
 	handleRequests()
 }
