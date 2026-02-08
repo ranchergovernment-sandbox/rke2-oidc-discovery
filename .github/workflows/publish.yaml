@@ -82,7 +82,7 @@ jobs:
 
       - name: Package Helm Chart
         run: |
-          cp -r chart /tmp/chart
+          cp -r charts/rke2-oidc-discovery /tmp/chart
           helm package --app-version ${{ github.ref_name }} --version ${{ github.ref_name }} -d /tmp/ /tmp/chart
 
       - name: Derive repo name
