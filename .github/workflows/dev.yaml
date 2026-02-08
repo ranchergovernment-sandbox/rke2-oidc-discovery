@@ -32,4 +32,4 @@ jobs:
         run: |
           VERSION=$(git rev-parse --short "$GITHUB_SHA")
           docker buildx create --name multiarch --driver docker-container --use
-          docker buildx build --platform linux/amd64 -f Containerfile --push -t ghcr.io/${{ github.repository }}:$VERSION .
+          docker buildx build --platform linux/amd64 --push -t ghcr.io/${{ github.repository }}:$VERSION .
