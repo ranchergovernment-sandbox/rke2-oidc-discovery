@@ -1,10 +1,9 @@
-name: Docker
+name: release-build
 
 on:
   push:
     tags:
     - "*"
-
 jobs:
   build:
     name: Build and deploy
@@ -64,13 +63,26 @@ jobs:
           asset_name: sha256sum.txt
           asset_content_type: text/plain
 
-      - name: Install Helm
-        uses: azure/setup-helm@v3
+  helm:
+    name: Package and publish helm chart
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
+
+      - uses: azure/setup-helm@v4.3.0
+        id: install
 
       - name: Package Helm Chart
         run: |
-          # Copy the chart and package it for the appVersion and chart version that matches the tag
-          cp -r charts/rke2-oidc-discovery /tmp/chart
+          cp -r chart /tmp/chart
           helm package --app-version ${{ github.ref_name }} --version ${{ github.ref_name }} -d /tmp/ /tmp/chart
 
       - name: Derive repo name
